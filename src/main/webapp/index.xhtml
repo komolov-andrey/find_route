@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+    
+    <html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Поиск маршрута</title>
+    </h:head>
+
+    <h:body>
+
+        <h:form>
+
+            <div align="center">
+                <h2>Поиск маршрута:</h2>
+            </div>
+
+            <p:growl id="growl"/>
+
+
+            <p:outputPanel id="showPage" >
+
+                <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+                <script type="text/javascript">
+                    ymaps.ready(init);
+
+                    function init() {
+                        // Создаем карту.
+                        var myMap = new ymaps.Map("map", {
+                            center: [55.761317, 37.620393],
+                            zoom: 7
+                        });
+
+                        // Создаем ломаную с помощью вспомогательного класса Polyline.
+                        var myPolyline = new ymaps.Polyline(
+                            // Указываем координаты вершин ломаной.			
+                            #{route.coor}
+                        , {
+                            // Описываем свойства геообъекта.
+                            // Содержимое балуна.
+                            balloonContent: "your route"
+                        }, {
+                            // Задаем опции геообъекта
+                            // Цвет линии.
+                            strokeColor: "#FF0000",
+                            // Ширина линии.
+                            strokeWidth: 5,
+                            // Коэффициент прозрачности.
+                            strokeOpacity: 0.9
+                        });
+
+                        // Добавляем линии на карту.
+                        myMap.geoObjects
+                                .add(myPolyline);
+                    }
+                </script>
+                <table align="center" border="5">
+                    <tr>
+                        <td>
+                            <h7>Адрес отправления</h7>
+                            <br/>
+                            <p:inputText size="30" value="#{route.departureAdr}"/>
+                            <br/>
+                            <div align="right">
+                                <h:outputText value="#{route.departure}   " />
+                            </div>
+                            <h7>Адрес Назначения</h7>
+                            <br/>
+                            <p:inputText size="30" value="#{route.appointmentAdr}"/>
+                            <br/>
+                            <div align="right">
+                                <h:outputText value="#{route.appointment}   " />
+                            </div>
+                            <h7>Заехать</h7>
+                            <br/>
+                            <p:inputText size="30" value="#{route.coor1Adr}"/>
+                            <br/>
+                            <div align="right">
+                                <h:outputText value="#{route.coor1}   " />
+                            </div>
+                            <h7>Заехать</h7>
+                            <br/>
+                            <p:inputText size="30" value="#{route.coor2Adr}"/>
+                            <br/>
+                            <div align="right">
+                                <h:outputText value="#{route.coor2}   " />
+                            </div>
+                            <h7>Заехать</h7>
+                            <br/>
+                            <p:inputText size="30" value="#{route.coor3Adr}"/>
+                            <br/>
+                            <div align="right">
+                                <h:outputText value="#{route.coor3}   " />
+                            </div>
+                            <h7>Заехать</h7>
+                            <br/>
+                            <p:inputText size="30" value="#{route.coor4Adr}"/>
+                            <br/>
+                            <div align="right">
+                                <h:outputText value="#{route.coor4}   " />
+                            </div>
+
+                            <br/>
+                            <br/>
+                            <p:commandButton value="Построить" update="showPage, growl" actionListener="#{route.findRoute}"/>
+
+                            <br/>
+                            <div align="right">
+                                <h:outputText value="Дистанция: #{route.distance} км   " />
+                            </div>
+                            <br/>
+                            <div align="right">
+                                <h:outputText value="Время в пути: #{route.duration} мин   "/>
+                                <br/>
+                                <h:outputText value="#{route.durationHour} ч   "/>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div id="map" style="width: 1100px; height: 700px;"/>
+                        </td>
+                    </tr> 
+                </table>
+
+            </p:outputPanel>
+
+        </h:form>
+    </h:body>
+</html>
